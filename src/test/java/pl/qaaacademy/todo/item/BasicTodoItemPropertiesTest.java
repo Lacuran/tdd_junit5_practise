@@ -38,6 +38,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> TodoItem.of(emptyTitle, description));
     }
 
+    @Tag("exception")
     @Test
     public void shouldThrowAnExceptionWhileSettingAnEmptyTitle() {
         String emptyTitle = "";
@@ -45,12 +46,14 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setTitle(emptyTitle));
     }
 
+    @Tag("happy")
     @Test
     public void shouldChangeStatusFromPendingToInProgress() {
         item.toggleStatus();
         assertEquals(ItemStatus.IN_PROGRESS, item.getStatus());
     }
 
+    @Tag("happy")
     @Test
     public void shouldChangeStatusFromInProgressToInPending() {
         item.toggleStatus();
@@ -58,6 +61,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertEquals(ItemStatus.PENDING, item.getStatus());
     }
 
+    @Tag("happy")
     @Test
     public void shouldCompleteATaskRepresentByItem() {
         item.toggleStatus();
@@ -65,11 +69,13 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertEquals(ItemStatus.COMPLETED, item.getStatus());
     }
 
+    @Tag("happy")
     @Test
     public void shouldCreateItemWithPendingStatus() {
         assertEquals(ItemStatus.PENDING, item.getStatus());
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotToggleStatusFromCompletedToInProgress() {
         item.toggleStatus();
@@ -78,6 +84,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.toggleStatus());
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotCreateATodoItemWithDescriptionLongerThan250Chars() {
         String descriptionLongerThan250Chars = RandomGeneratedString.randomGeneratedString(251);
@@ -85,6 +92,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> TodoItem.of(title, descriptionLongerThan250Chars));
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotCreateATodoItemWithDescriptionWithNull() {
         String emptyDescription = "";
@@ -92,6 +100,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> TodoItem.of(title, emptyDescription));
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotSetANewDescriptionLongerThan250Chars() {
         String descriptionLongerThan250Chars = RandomGeneratedString.randomGeneratedString(251);
@@ -99,7 +108,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(descriptionLongerThan250Chars));
     }
 
-
+    @Tag("exception")
     @Test
     public void shouldNotSetAnEmptyNewDescription() {
         String emptyDescription = "";
@@ -107,7 +116,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(emptyDescription));
     }
 
-    @Tag("item")
+    @Tag("happy")
     @Test
     public void shouldChangeStatusFromCompleteToReOpen() {
         item.toggleStatus();
@@ -116,7 +125,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertEquals(ItemStatus.REOPEN, item.getStatus());
     }
 
-    @Tag("item")
+    @Tag("happy")
     @Test
     public void shouldChangeStatusFromReOpenToPending() {
         item.toggleStatus();
@@ -151,6 +160,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setTitle(newTitle));
     }
 
+    @Tag("description")
     @Tag("exception")
     @Test
     public void shouldNotChangeDescriptionIfItemIsComplete() {
@@ -161,7 +171,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(newDescription));
     }
 
-    @Tag("item")
+    @Tag("description")
     @Tag("happy")
     @Test
     public void shouldChangeDescriptionWhenItemIsInProgress() {
@@ -185,7 +195,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertThat(newTodo, isValidTodoItemWith(title, description));
     }
 
-    @Tag("item")
+    @Tag("exception")
     @Test
     public void shouldNotCreateAnItemWithTitleLowerThan5Chars() {
         String itemTitleLowerThan5Chars = "Asd";
