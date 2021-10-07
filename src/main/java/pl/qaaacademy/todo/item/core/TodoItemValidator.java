@@ -12,12 +12,12 @@ import java.util.function.Predicate;
 public class TodoItemValidator {
     protected static final Logger logger = LoggerFactory.getLogger(TodoItem.class);
 
-    private static List<Predicate<String>> titleValidationCriteria = List.of(
+    private static final List<Predicate<String>> titleValidationCriteria = List.of(
             t -> !t.isBlank(),
             t -> t.length() > 5
     );
 
-    private static List<Predicate<String>> descriptionValidationCriteria = List.of(
+    private static final List<Predicate<String>> descriptionValidationCriteria = List.of(
             d -> !d.isBlank(),
             d -> !(d.length() > 250)
     );

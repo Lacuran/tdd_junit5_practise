@@ -182,7 +182,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(files = {"src/main/resources/todocsv.csv" }, numLinesToSkip = 1)
+    @CsvFileSource(files = {"src/test/resources/todocsv.csv" }, numLinesToSkip = 1)
     public void shouldCreateValidateTodoItemCSVFileSource(String title, String description) {
         TodoItem newTodo = TodoItem.of(title, description);
         assertThat(newTodo, isValidTodoItemWith(title, description));
@@ -201,6 +201,13 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         String itemTitleLowerThan5Chars = "Asd";
         assertThrows(TodoItemValidationException.class,
                 () -> TodoItem.of(itemTitleLowerThan5Chars, description));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(files = {"src/test/resources/todocsvfortesting.csv" }, numLinesToSkip = 1)
+    public void validateTestFileForTodoItemWithDiffrentParameters(String title, String description) {
+        TodoItem newTodo = TodoItem.of(title, description);
+        assertThat(newTodo, isValidTodoItemWith(title, description));
     }
 
 }
