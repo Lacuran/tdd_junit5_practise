@@ -2,20 +2,30 @@ package pl.qaaacademy.todo.item;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.qaaacademy.todo.item.Exception.TodoItemCompleteChangeStatusException;
+import pl.qaaacademy.todo.item.Exception.TodoItemCompleteStatusException;
+import pl.qaaacademy.todo.item.Exception.TodoItemPendingStatusToCompleteExceptionThrow;
+import pl.qaaacademy.todo.item.Exception.TodoItemReOpenStatusExceptionThrow;
+import pl.qaaacademy.todo.item.enums.ItemStatus;
+import pl.qaaacademy.todo.item.interfaces.StatusChangeable;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
+
+import static pl.qaaacademy.todo.item.core.TodoItemValidator.validateDescription;
+import static pl.qaaacademy.todo.item.core.TodoItemValidator.validateTitle;
 
 public class TodoItem implements StatusChangeable {
     private String title;
     private String description;
     private ItemStatus status;
+    private static Predicate<String> descriptionCriteria;
 
     protected static final Logger logger;
 
     static {
         logger = LoggerFactory.getLogger(TodoItem.class);
-
+        descriptionCriteria =
     }
 
     private TodoItem() {
@@ -65,30 +75,6 @@ public class TodoItem implements StatusChangeable {
         }
     }
 
-    private static void validateTitle(String title) {
-        if ((title == null || title.isBlank())) { //TODO add description check
-            logger.error("Item title or description is null or blank");
-            throw new TodoItemValidationException("Item title or description is null or blank");
-        }
-    }
-
-    private static void validateDescription(String description) {
-        if (description == null || description.isBlank() || description.length() > 250) {
-            logger.error("Description length is longer than 250 or null");
-            throw new TodoItemDescriptionValidationException("Description length is longer than 250 or null");
-        }
-
-    }
-
-    public void validateTest(String title, List<Predicate<String>> criteria) {
-        //TODO
-        // stream pipeline for criteria
-        // each criteria get a title to perform checks
-        // collect to list of boolean
-        // filter list to find false, to list and check if list size is > 0
-
-
-    }
 
     @Override
     public void toggleStatus() {
@@ -123,5 +109,27 @@ public class TodoItem implements StatusChangeable {
         } else {
             this.status = ItemStatus.COMPLETED;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TodoItem item = (TodoItem) o;
+        return Objects.equals(title, item.title) && Objects.equals(description, item.description) && status == item.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, status);
+    }
+
+    @Override
+    public String toString() {
+        return "TodoItem{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

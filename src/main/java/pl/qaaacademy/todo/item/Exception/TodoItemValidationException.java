@@ -1,4 +1,4 @@
-package pl.qaaacademy.todo.item;
+package pl.qaaacademy.todo.item.Exception;
 
 public class TodoItemValidationException extends RuntimeException {
 

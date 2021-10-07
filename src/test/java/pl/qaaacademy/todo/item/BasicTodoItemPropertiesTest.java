@@ -2,16 +2,25 @@ package pl.qaaacademy.todo.item;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.qaaacademy.todo.item.Exception.*;
+import pl.qaaacademy.todo.item.enums.ItemStatus;
+import pl.qaaacademy.todo.item.stringgenerator.RandomGeneratedString;
 
-import java.util.List;
-import java.util.function.Predicate;
-
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static pl.qaaacademy.todo.matcher.ValidTodoItemMatcher.isValidTodoItemWith;
 
 @Tag("item")
 public class BasicTodoItemPropertiesTest extends BaseTest {
+    //TODO
+    //move to other directory folders
+    //clean code
+    //
 
 
     Logger logger2 = LoggerFactory.getLogger(BasicTodoItemPropertiesTest.class);
@@ -162,19 +171,22 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
 
     @Test
     public void shouldGiveListOfBooleans() {
-        String emptyTitle = "";
-        String nullTitle = null;
-        List<Predicate<String>> criteria = List.of(
-                s -> {
-                    if (s.isBlank()) {
-                        return false;
-                    }
-                    return true;
-                },
-                s -> title.length() > 3
-        );
-        item.validateTest(emptyTitle, criteria);
 
+
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(files = {"src/main/resources/todocsv.csv" }, numLinesToSkip = 1)
+    public void shouldCreateValidateTodoItemCSVFileSource(String title, String description) {
+        TodoItem newTodo = TodoItem.of(title, description);
+        assertThat(newTodo, isValidTodoItemWith(title, description));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TodoItemArgumentsProvider.class)
+    public void shouldCreateValidTodoItemArgumentSource(String title, String description) {
+        TodoItem newTodo = TodoItem.of(title, description);
+        assertThat(newTodo, isValidTodoItemWith(title, description));
     }
 
 }

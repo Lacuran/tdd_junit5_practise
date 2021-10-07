@@ -1,4 +1,4 @@
-package pl.qaaacademy.todo.item;
+package pl.qaaacademy.todo.item.stringgenerator;
 
 import java.util.Random;
 
