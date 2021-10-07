@@ -17,11 +17,6 @@ import static pl.qaaacademy.todo.matcher.ValidTodoItemMatcher.isValidTodoItemWit
 
 @Tag("item")
 public class BasicTodoItemPropertiesTest extends BaseTest {
-    //TODO
-    //move to other directory folders
-    //clean code
-    //
-
 
     Logger logger2 = LoggerFactory.getLogger(BasicTodoItemPropertiesTest.class);
 
@@ -104,6 +99,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(descriptionLongerThan250Chars));
     }
 
+
     @Test
     public void shouldNotSetAnEmptyNewDescription() {
         String emptyDescription = "";
@@ -111,6 +107,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(emptyDescription));
     }
 
+    @Tag("item")
     @Test
     public void shouldChangeStatusFromCompleteToReOpen() {
         item.toggleStatus();
@@ -119,6 +116,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertEquals(ItemStatus.REOPEN, item.getStatus());
     }
 
+    @Tag("item")
     @Test
     public void shouldChangeStatusFromReOpenToPending() {
         item.toggleStatus();
@@ -128,6 +126,7 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
         assertEquals(ItemStatus.PENDING, item.getStatus());
     }
 
+    @Tag("exception")
     @Test
     public void shouldTrowExceptionWhileChangingStatusFromInProgressToReOpen() {
         item.toggleStatus();
@@ -135,15 +134,16 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.reOpen());
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotCompleteItemInPendingStatus() {
         assertThrows(TodoItemPendingStatusToCompleteExceptionThrow.class,
                 () -> item.complete());
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotChangeTitleIfItemIsComplete() {
-        //TODO
         String newTitle = "This is new title of a item";
         item.toggleStatus();
         item.complete();
@@ -151,9 +151,9 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setTitle(newTitle));
     }
 
+    @Tag("exception")
     @Test
     public void shouldNotChangeDescriptionIfItemIsComplete() {
-        //TODO
         String newDescription = "This is new description for an item";
         item.toggleStatus();
         item.complete();
@@ -161,18 +161,14 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
                 () -> item.setDescription(newDescription));
     }
 
+    @Tag("item")
+    @Tag("happy")
     @Test
     public void shouldChangeDescriptionWhenItemIsInProgress() {
         String newDescription = "This is new item description";
         item.toggleStatus();
         item.setDescription(newDescription);
         assertEquals(newDescription, item.getDescription());
-    }
-
-    @Test
-    public void shouldGiveListOfBooleans() {
-
-
     }
 
     @ParameterizedTest
@@ -187,6 +183,14 @@ public class BasicTodoItemPropertiesTest extends BaseTest {
     public void shouldCreateValidTodoItemArgumentSource(String title, String description) {
         TodoItem newTodo = TodoItem.of(title, description);
         assertThat(newTodo, isValidTodoItemWith(title, description));
+    }
+
+    @Tag("item")
+    @Test
+    public void shouldNotCreateAnItemWithTitleLowerThan5Chars() {
+        String itemTitleLowerThan5Chars = "Asd";
+        assertThrows(TodoItemValidationException.class,
+                () -> TodoItem.of(itemTitleLowerThan5Chars, description));
     }
 
 }

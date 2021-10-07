@@ -17,19 +17,28 @@ public class TodoItemValidator {
             t -> t.length() > 5
     );
 
-    private static boolean validateItemProperty(String title, List<Predicate<String>> criteria) {
-        return criteria.stream().anyMatch(crit -> crit.test(title));
+    private static List<Predicate<String>> descriptionValidationCriteria = List.of(
+            d -> !d.isBlank(),
+            d -> !(d.length() > 250)
+    );
+
+    private static boolean validateItemTitleProperty(String title, List<Predicate<String>> criteria) {
+        return criteria.stream().allMatch(crit -> crit.test(title));
+    }
+
+    private static boolean validateItemDescriptionProperty(String description, List<Predicate<String>> criteria) {
+        return criteria.stream().allMatch(crit -> crit.test(description));
     }
 
     public static void validateTitle(String title) {
-        if (!validateItemProperty(title, titleValidationCriteria)) {
+        if (!validateItemTitleProperty(title, titleValidationCriteria)) {
             logger.error("Item title or description is null or blank");
             throw new TodoItemValidationException("Item title or description is null or blank");
         }
     }
 
-    public static void validateDescription(String description, Predicate<String> criterion) {
-        if (criterion.test(description)) {
+    public static void validateDescription(String description) {
+        if (!validateItemDescriptionProperty(description, descriptionValidationCriteria)) {
             logger.error("Description length is longer than 250 or null");
             throw new TodoItemDescriptionValidationException("Description length is longer than 250 or null");
         }

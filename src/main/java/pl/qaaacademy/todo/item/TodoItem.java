@@ -10,7 +10,6 @@ import pl.qaaacademy.todo.item.enums.ItemStatus;
 import pl.qaaacademy.todo.item.interfaces.StatusChangeable;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static pl.qaaacademy.todo.item.core.TodoItemValidator.validateDescription;
 import static pl.qaaacademy.todo.item.core.TodoItemValidator.validateTitle;
@@ -19,13 +18,12 @@ public class TodoItem implements StatusChangeable {
     private String title;
     private String description;
     private ItemStatus status;
-    private static Predicate<String> descriptionCriteria;
+
 
     protected static final Logger logger;
 
     static {
         logger = LoggerFactory.getLogger(TodoItem.class);
-        descriptionCriteria =
     }
 
     private TodoItem() {
