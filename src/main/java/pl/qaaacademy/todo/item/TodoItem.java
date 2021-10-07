@@ -10,7 +10,13 @@ public class TodoItem implements StatusChangeable {
     private String title;
     private String description;
     private ItemStatus status;
-    protected static final Logger logger = LoggerFactory.getLogger(TodoItem.class);
+
+    protected static final Logger logger;
+
+    static {
+        logger = LoggerFactory.getLogger(TodoItem.class);
+
+    }
 
     private TodoItem() {
     }
@@ -40,14 +46,23 @@ public class TodoItem implements StatusChangeable {
     }
 
     public void setTitle(String title) {
-        validateTitle(title);
-        this.title = title;
+        if (this.status == ItemStatus.COMPLETED) {
+            logger.error("Cant change title or description after item is completed");
+            throw new TodoItemCompleteChangeStatusException("Cant change title or description after item is completed");
+        } else {
+            validateTitle(title);
+            this.title = title;
+        }
     }
 
     public void setDescription(String description) {
-        validateDescription(description);
-        this.description = description;
-
+        if (this.status == ItemStatus.COMPLETED) {
+            logger.error("Cant change title or description after item is completed");
+            throw new TodoItemCompleteChangeStatusException("Cant change title or description after item is completed");
+        } else {
+            validateDescription(description);
+            this.description = description;
+        }
     }
 
     private static void validateTitle(String title) {
@@ -65,13 +80,15 @@ public class TodoItem implements StatusChangeable {
 
     }
 
-    private static void validateTest(String title, List<Predicate<TodoItem>> criteria) {
+    public void validateTest(String title, List<Predicate<String>> criteria) {
+        //TODO
         // stream pipeline for criteria
         // each criteria get a title to perform checks
         // collect to list of boolean
-        //filter list to find false, to list and check if list size is > 0
-    }
+        // filter list to find false, to list and check if list size is > 0
 
+
+    }
 
     @Override
     public void toggleStatus() {

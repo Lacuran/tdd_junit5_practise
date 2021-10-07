@@ -13,12 +13,15 @@ public class BaseTest {
     protected TodoItem item;
 
 
-    @AfterEach
-    
     @BeforeEach
     public void setUpTest() {
         title = "Complete Java Udemy course";
         description = "Ivan set to do it quickly";
         item = TodoItem.of(title, description);
+    }
+
+    @AfterEach
+    public void cleanUpTest() {
+        item = null;
     }
 }
