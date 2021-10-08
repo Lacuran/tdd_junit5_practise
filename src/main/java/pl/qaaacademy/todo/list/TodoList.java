@@ -3,10 +3,13 @@ package pl.qaaacademy.todo.list;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.qaaacademy.todo.item.TodoItem;
+import pl.qaaacademy.todo.item.enums.ItemStatus;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TodoList {
     private String title;
@@ -36,7 +39,7 @@ public class TodoList {
         return title;
     }
 
-    public long getListSize() {
+    public int getListSize() {
         return itemList.size();
     }
 
@@ -49,7 +52,15 @@ public class TodoList {
     }
 
     public void addItem(TodoItem item) {
-        itemList.add(item);
+        for (TodoItem t : itemList.stream().toList()) {
+            if (t.getTitle().equals(item.getTitle())) {
+                logger.error("This item already exist in List");
+                throw new TodoListSameItemTitleExceptionThrow("This item already exist in List");
+            } else {
+                itemList.add(item);
+            }
+        }
+
     }
 
 
@@ -74,9 +85,62 @@ public class TodoList {
                 '}';
     }
 
-    public TodoList removeItem(String itemTitle) {
+    public void removeItem(String itemTitle) {
+        for (TodoItem t : itemList.stream().toList()) {
+            if (t.getTitle().equals(itemTitle)) {
+                removeItem(t);
+            }
+        }
+        /*TodoList newlist = TodoList.of(this.title);
+        itemList.forEach(t -> {
+            if (t.getTitle().equals(itemTitle)) {
+                this.itemList.remove(t);
+            }
+
+            newlist.addItem(t);
+        });
+        return newlist;*/
+
+    }
+
+    public void removeItem(TodoItem item) {
+        if (this.itemList.contains(item)) {
+            this.itemList.remove(item);
+        }
+    }
 
 
-        return new TodoList(this.title);
+    public static TodoList fuzeList(TodoList firstList, TodoList secondList, String title) {
+        TodoList newList = TodoList.of(title);
+
+        for (TodoItem t : firstList.getItemList()) {
+            newList.addItem(t);
+            System.out.println("Added item form first list");
+
+        }
+        for (TodoItem t : secondList.getItemList()) {
+            newList.addItem(t);
+            System.out.println("Added item form second list");
+        }
+
+        return newList;
+
+    }
+
+
+    public void filterByStatus(ItemStatus status) {
+//        TodoList newList = TodoList.of(title);
+        for (TodoItem s : itemList.stream().toList()) {
+            if (!s.getStatus().equals(status)) {
+                removeItem(s);
+            }
+        }
+//        return newList;
+    }
+
+    public void sortList() {
+        this.itemList = getItemList().stream()
+                .sorted(Comparator.comparing(TodoItem::getTitle))
+                .collect(Collectors.toList());
     }
 }
