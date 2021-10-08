@@ -15,7 +15,7 @@ public class BaseTodoListTest {
     @BeforeEach
     public void todoListSetUp() {
         titleList = "This is List of a Title";
-        itemList = TodoList.of(titleList);
+        itemList = new TodoList(titleList);
     }
 
     @AfterEach

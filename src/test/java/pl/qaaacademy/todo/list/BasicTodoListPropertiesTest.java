@@ -49,8 +49,8 @@ public class BasicTodoListPropertiesTest extends BaseTodoListTest {
     @Tag("happy")
     @Test
     public void shouldCombineSeveralListWithNewTitle() {
-        TodoList itemList2 = TodoList.of("List 2");
-        TodoList itemListPrime = TodoList.of("List Prime");
+        TodoList itemList2 = new TodoList("List 2");
+        TodoList itemListPrime = new TodoList("List Prime");
 
         itemList.addItem(TodoItem.of("This is item 1", "description of item 1"));
         itemList.addItem(TodoItem.of("This is item 2", "description of item 2"));
@@ -75,7 +75,7 @@ public class BasicTodoListPropertiesTest extends BaseTodoListTest {
 
         String emptyTitle = "";
         assertThrows(TodoListValidTitleExceptionThrow.class,
-                () -> TodoList.of(emptyTitle));
+                () -> new TodoList(emptyTitle));
     }
 
     @Tag("happy")
@@ -119,8 +119,6 @@ public class BasicTodoListPropertiesTest extends BaseTodoListTest {
 
         itemList.filterByStatus(ItemStatus.COMPLETED);
         assertEquals(1, itemList.getListSize());
-        System.out.println("First test done");
-
 
     }
 
@@ -129,7 +127,7 @@ public class BasicTodoListPropertiesTest extends BaseTodoListTest {
     public void shouldSortItemsByTitle() {
         //TODO
         // Items can be sorted by title
-        TodoList itemList2 = TodoList.of(itemList.getListTitle());
+        TodoList itemList2 = new TodoList(itemList.getListTitle());
         TodoItem item1 = TodoItem.of("This is the title4", "This is item description");
         TodoItem item2 = TodoItem.of("This is the title3", "This is item description");
         TodoItem item3 = TodoItem.of("This is the title2", "This is item description");
@@ -157,8 +155,8 @@ public class BasicTodoListPropertiesTest extends BaseTodoListTest {
         TodoItem item1 = TodoItem.of("This is the title", "This is item description");
         TodoItem item2 = TodoItem.of("This is the title", "This is item description");
         itemList.addItem(item1);
-        itemList.addItem(item2);
-        assertEquals(1, itemList.getListSize());
+//        itemList.addItem(item2);
+//        assertEquals(1, itemList.getListSize());
 
         assertThrows(TodoListSameItemTitleExceptionThrow.class,
                 () -> itemList.addItem(item2));

@@ -17,15 +17,19 @@ public class TodoList {
 
     protected static final Logger logger = LoggerFactory.getLogger(TodoList.class);
 
-    private TodoList() {
-    }
 
-    private TodoList(String title) {
-        this.title = title;
+    public TodoList(String title) {
+        if (title.isBlank()) {
+            logger.error("Cant create list with empty title");
+            throw new TodoListValidTitleExceptionThrow("Cant create list with empty title");
+        } else {
+            this.title = title;
+        }
+
         this.itemList = new ArrayList<>();
     }
 
-    public static TodoList of(String title) {
+    /*public static TodoList of(String title) {
         if (title.isBlank()) {
             logger.error("Cant create list with empty title");
             throw new TodoListValidTitleExceptionThrow("Cant create list with empty title");
@@ -33,7 +37,7 @@ public class TodoList {
             return new TodoList(title);
         }
 
-    }
+    }*/
 
     public String getListTitle() {
         return title;
@@ -52,15 +56,13 @@ public class TodoList {
     }
 
     public void addItem(TodoItem item) {
-        for (TodoItem t : itemList.stream().toList()) {
+        for (TodoItem t : this.itemList) {
             if (t.getTitle().equals(item.getTitle())) {
-                logger.error("This item already exist in List");
-                throw new TodoListSameItemTitleExceptionThrow("This item already exist in List");
-            } else {
-                itemList.add(item);
+                logger.error("Same item already exists");
+                throw new TodoListSameItemTitleExceptionThrow("Same item already exists");
             }
         }
-
+        itemList.add(item);
     }
 
 
@@ -111,7 +113,7 @@ public class TodoList {
 
 
     public static TodoList fuzeList(TodoList firstList, TodoList secondList, String title) {
-        TodoList newList = TodoList.of(title);
+        TodoList newList = new TodoList(title);
 
         for (TodoItem t : firstList.getItemList()) {
             newList.addItem(t);
@@ -129,7 +131,7 @@ public class TodoList {
 
 
     public void filterByStatus(ItemStatus status) {
-//        TodoList newList = TodoList.of(title);
+//        TodoList newList = new TodoList(title);
         for (TodoItem s : itemList.stream().toList()) {
             if (!s.getStatus().equals(status)) {
                 removeItem(s);
